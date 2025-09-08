@@ -6,6 +6,10 @@ export default function Login() {
     password: "",
   });
 
+  // example of validating on keystroke - this is creating an error that appears when the following conditions are met
+  const emailIsInvalid =
+    enteredValues.email !== "" && !enteredValues.email.includes("@");
+
   function handleSubmit(event) {
     // this prevents the browsers default behavior of sending a form http request to the server (causing the project to reload) in React apps
     event.preventDefault();
@@ -41,6 +45,10 @@ export default function Login() {
             type="email"
             name="email"
           />
+          <div className="control-error">
+            {/* this is where we are implementing our keystroke error */}
+            {emailIsInvalid && <p>Please enter a valid email address.</p>}
+          </div>
         </div>
 
         <div className="control no-margin">
