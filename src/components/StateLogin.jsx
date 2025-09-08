@@ -6,9 +6,14 @@ export default function Login() {
     password: "",
   });
 
-  // example of validating on keystroke - this is creating an error that appears when the following conditions are met
-  const emailIsInvalid =
-    enteredValues.email !== "" && !enteredValues.email.includes("@");
+  //create a state to track the focus of the user - via onBlur prop on inputs
+  const [didEdit, setDidEdit] = useState({
+    email: false,
+    password: false,
+  });
+
+  // example of validating on lost focus(using didEdit state check) and on keystroke (checking if entered value includes an @) - this is creating an error that appears when the following conditions are met
+  const emailIsInvalid = didEdit.email && !enteredValues.email.includes("@");
 
   function handleSubmit(event) {
     // this prevents the browsers default behavior of sending a form http request to the server (causing the project to reload) in React apps
@@ -29,6 +34,13 @@ export default function Login() {
       ...prevValues,
       [identifier]: value,
     }));
+    // update this to incorporate our did edit state, so that when the focus is reselected, the error goes away until they click off of it (and don't meet the other criteria)
+    setDidEdit((prevEdit) => ({ ...prevEdit, [identifier]: false }));
+  }
+
+  // handler that tracks our didEdit state for validation
+  function handleInputBlur(identifier) {
+    setDidEdit((prevEdit) => ({ ...prevEdit, [identifier]: true }));
   }
 
   return (
@@ -40,6 +52,7 @@ export default function Login() {
           <label htmlFor="email">Email</label>
           <input
             value={enteredValues.email}
+            onBlur={() => handleInputBlur("email")}
             onChange={(event) => handleInputChange("email", event.target.value)}
             id="email"
             type="email"
