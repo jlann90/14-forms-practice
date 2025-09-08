@@ -13,6 +13,9 @@ export default function Signup() {
     const acquisitionChannel = fd.getAll("acquisition");
     data.acquisition = acquisitionChannel;
     console.log(data);
+
+    // Example of resetting, this will run when clicking submit since it's in handleSubmit
+    // event.target.reset();
   }
 
   return (
@@ -102,6 +105,7 @@ export default function Signup() {
       </div>
 
       <p className="form-actions">
+        {/* the type "reset" on a button actually allows the button to reset the form */}
         <button type="reset" className="button button-flat">
           Reset
         </button>

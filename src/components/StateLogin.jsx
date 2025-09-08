@@ -12,6 +12,12 @@ export default function Login() {
     console.log("Submitted");
     console.log("Email: " + enteredValues.email);
     console.log("Password: " + enteredValues.password);
+
+    // example of resetting the form after the submit, just resetting the state to the default values
+    setEnteredValues({
+      email: "",
+      password: "",
+    });
   }
 
   function handleInputChange(identifier, value) {

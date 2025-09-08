@@ -17,6 +17,9 @@ export default function Login() {
         " user password is " +
         enteredPassword
     );
+
+    // Example of resetting refs - same as the FormData approach
+    event.target.reset();
   }
 
   return (
