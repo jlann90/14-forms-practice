@@ -1,24 +1,22 @@
-import { useState } from "react";
+import { useRef } from "react";
 
 export default function Login() {
-  const [enteredValues, setEnteredValues] = useState({
-    email: "",
-    password: "",
-  });
+  const email = useRef();
+  const password = useRef();
 
   function handleSubmit(event) {
     // this prevents the browsers default behavior of sending a form http request to the server (causing the project to reload) in React apps
     event.preventDefault();
-    console.log("Submitted");
-    console.log("Email: " + enteredValues.email);
-    console.log("Password: " + enteredValues.password);
-  }
 
-  function handleInputChange(identifier, value) {
-    setEnteredValues((prevValues) => ({
-      ...prevValues,
-      [identifier]: value,
-    }));
+    const enteredEmail = email.current.value;
+    const enteredPassword = password.current.value;
+    console.log(
+      "Submitted" +
+        " user email is " +
+        enteredEmail +
+        " user password is " +
+        enteredPassword
+    );
   }
 
   return (
@@ -28,26 +26,12 @@ export default function Login() {
       <div className="control-row">
         <div className="control no-margin">
           <label htmlFor="email">Email</label>
-          <input
-            value={enteredValues.email}
-            onChange={(event) => handleInputChange("email", event.target.value)}
-            id="email"
-            type="email"
-            name="email"
-          />
+          <input ref={email} id="email" type="email" name="email" />
         </div>
 
         <div className="control no-margin">
           <label htmlFor="password">Password</label>
-          <input
-            value={enteredValues.password}
-            onChange={(event) =>
-              handleInputChange("password", event.target.value)
-            }
-            id="password"
-            type="password"
-            name="password"
-          />
+          <input ref={password} id="password" type="password" name="password" />
         </div>
       </div>
 
