@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 export default function Signup() {
+  const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState(false);
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -12,6 +15,12 @@ export default function Signup() {
     // Below is an example on how to get multi value input fields (for example all fields with acquisition) and then we merge it into the data object we made above with the key of "acquisition"
     const acquisitionChannel = fd.getAll("acquisition");
     data.acquisition = acquisitionChannel;
+
+    if (data.password !== data["confirm-password"]) {
+      setPasswordsAreNotEqual(true);
+      return;
+    }
+
     console.log(data);
 
     // Example of resetting, this will run when clicking submit since it's in handleSubmit
@@ -48,6 +57,9 @@ export default function Signup() {
             name="confirm-password"
             required
           />
+          <div className="control-error">
+            {passwordsAreNotEqual && <p>Passwords must match.</p>}
+          </div>
         </div>
       </div>
 
