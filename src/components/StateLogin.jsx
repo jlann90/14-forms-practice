@@ -24,15 +24,13 @@ export default function Login() {
   function handleSubmit(event) {
     // this prevents the browsers default behavior of sending a form http request to the server (causing the project to reload) in React apps
     event.preventDefault();
-    console.log("Submitted");
-    console.log("Email: " + emailValue);
-    console.log("Password: " + enteredValues.password);
 
-    // example of resetting the form after the submit, just resetting the state to the default values
-    setEnteredValues({
-      email: "",
-      password: "",
-    });
+    // stop any code below the function if there is an error
+    if (emailHasError || passwordHasError) {
+      return;
+    }
+
+    console.log(emailValue, passwordValue);
   }
 
   return (
