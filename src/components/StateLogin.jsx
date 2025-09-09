@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Input from "./Input.jsx";
 
+import { isEmail, isNotEmpty, hasMinLength } from "../util/validation.js";
+
 export default function Login() {
   const [enteredValues, setEnteredValues] = useState({
     email: "",
@@ -14,9 +16,12 @@ export default function Login() {
   });
 
   // example of validating on lost focus(using didEdit state check) and on keystroke (checking if entered value includes an @) - this is creating an error that appears when the following conditions are met
-  const emailIsInvalid = didEdit.email && !enteredValues.email.includes("@");
+  const emailIsInvalid =
+    didEdit.email &&
+    !isEmail(enteredValues.email) &&
+    !isNotEmpty(enteredValues.email);
   const passwordIsInvalid =
-    didEdit.password && !enteredValues.password.trim().length < 6;
+    didEdit.password && !hasMinLength(enteredValues.password, 6);
 
   function handleSubmit(event) {
     // this prevents the browsers default behavior of sending a form http request to the server (causing the project to reload) in React apps
