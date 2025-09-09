@@ -1,33 +1,31 @@
-import { useState } from "react";
 import Input from "./Input.jsx";
-
+import { useInput } from "../hooks/useInput.js";
 import { isEmail, isNotEmpty, hasMinLength } from "../util/validation.js";
 
 export default function Login() {
-  const [enteredValues, setEnteredValues] = useState({
-    email: "",
-    password: "",
+  //call in our custom useInput hooks, one for Input and one for PW
+  const {
+    value: emailValue,
+    handleInputChange: handleEmailChange,
+    handleInputBlur: handleEmailBlur,
+    hasError: emailHasError,
+  } = useInput("", (value) => {
+    return isEmail(value) && isNotEmpty(value);
   });
-
-  //create a state to track the focus of the user - via onBlur prop on inputs
-  const [didEdit, setDidEdit] = useState({
-    email: false,
-    password: false,
+  const {
+    value: passwordValue,
+    handleInputChange: handlePasswordChange,
+    handleInputBlur: handlePasswordBlur,
+    hasError: passwordHasError,
+  } = useInput("", (value) => {
+    return hasMinLength(value, 6);
   });
-
-  // example of validating on lost focus(using didEdit state check) and on keystroke (checking if entered value includes an @) - this is creating an error that appears when the following conditions are met
-  const emailIsInvalid =
-    didEdit.email &&
-    !isEmail(enteredValues.email) &&
-    !isNotEmpty(enteredValues.email);
-  const passwordIsInvalid =
-    didEdit.password && !hasMinLength(enteredValues.password, 6);
 
   function handleSubmit(event) {
     // this prevents the browsers default behavior of sending a form http request to the server (causing the project to reload) in React apps
     event.preventDefault();
     console.log("Submitted");
-    console.log("Email: " + enteredValues.email);
+    console.log("Email: " + emailValue);
     console.log("Password: " + enteredValues.password);
 
     // example of resetting the form after the submit, just resetting the state to the default values
@@ -35,20 +33,6 @@ export default function Login() {
       email: "",
       password: "",
     });
-  }
-
-  function handleInputChange(identifier, value) {
-    setEnteredValues((prevValues) => ({
-      ...prevValues,
-      [identifier]: value,
-    }));
-    // update this to incorporate our did edit state, so that when the focus is reselected, the error goes away until they click off of it (and don't meet the other criteria)
-    setDidEdit((prevEdit) => ({ ...prevEdit, [identifier]: false }));
-  }
-
-  // handler that tracks our didEdit state for validation
-  function handleInputBlur(identifier) {
-    setDidEdit((prevEdit) => ({ ...prevEdit, [identifier]: true }));
   }
 
   return (
@@ -61,10 +45,10 @@ export default function Login() {
           id="email"
           type="email"
           name="email"
-          onBlur={() => handleInputBlur("email")}
-          onChange={(event) => handleInputChange("email", event.target.value)}
-          value={enteredValues.email}
-          error={emailIsInvalid && "Please enter a valid email"}
+          onBlur={handleEmailBlur}
+          onChange={handleEmailChange}
+          value={emailValue}
+          error={emailHasError && "Please enter a valid email"}
         />
 
         <Input
@@ -72,12 +56,10 @@ export default function Login() {
           id="password"
           type="password"
           name="password"
-          onBlur={() => handleInputBlur("password")}
-          onChange={(event) =>
-            handleInputChange("password", event.target.value)
-          }
-          value={enteredValues.password}
-          error={passwordIsInvalid && "Please enter a valid password"}
+          onBlur={handlePasswordBlur}
+          onChange={handlePasswordChange}
+          value={passwordValue}
+          error={passwordHasError && "Please enter a valid password"}
         />
       </div>
 
